@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord — Health Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <span class="brand">🩺 Health Tracker</span>
+    <nav>
+        <a th:href="@{/dashboard}" class="active">Tableau de bord</a>
+        <a th:href="@{/activities}">Activités</a>
+        <a th:href="@{/measures}">Mesures</a>
+        <a th:href="@{/medications}">Traitements</a>
+        <a th:href="@{/users}">Utilisateurs</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h1>Tableau de bord</h1>
+    <p class="subtitle">Vue synthétique de votre suivi de santé</p>
+
+    <section class="stats-grid">
+        <div class="stat-card">
+            <div class="value" th:text="${userCount}">0</div>
+            <div class="label">Utilisateurs</div>
+        </div>
+        <div class="stat-card">
+            <div class="value" th:text="${activityCount}">0</div>
+            <div class="label">Activités</div>
+        </div>
+        <div class="stat-card">
+            <div class="value" th:text="${measureCount}">0</div>
+            <div class="label">Mesures</div>
+        </div>
+        <div class="stat-card">
+            <div class="value" th:text="${medicationCount}">0</div>
+            <div class="label">Traitements</div>
+        </div>
+        <div class="stat-card">
+            <div class="value" th:text="${totalCalories} + ' kcal'">0</div>
+            <div class="label">Calories brûlées</div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Dernières activités</h2>
+        <table th:if="${!recentActivities.isEmpty()}">
+            <thead>
+            <tr>
+                <th>Utilisateur</th>
+                <th>Type</th>
+                <th>Durée</th>
+                <th>Calories</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${recentActivities}">
+                <td th:text="${a.user.fullName}">—</td>
+                <td th:text="${a.type}">—</td>
+                <td th:text="${a.durationMinutes} + ' min'">—</td>
+                <td th:text="${a.caloriesBurned} + ' kcal'">—</td>
+                <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}">—</td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="empty" th:if="${recentActivities.isEmpty()}">Aucune activité enregistrée pour l'instant.</p>
+    </section>
+
+    <section class="card">
+        <h2>Derniers relevés de santé</h2>
+        <table th:if="${!recentMeasures.isEmpty()}">
+            <thead>
+            <tr>
+                <th>Utilisateur</th>
+                <th>Poids</th>
+                <th>Tension</th>
+                <th>Fréq. cardiaque</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="m : ${recentMeasures}">
+                <td th:text="${m.user.fullName}">—</td>
+                <td th:text="${m.weight} + ' kg'">—</td>
+                <td th:text="${m.bloodPressure} + ' mmHg'">—</td>
+                <td th:text="${m.heartRate} + ' bpm'">—</td>
+                <td th:text="${#temporals.format(m.date, 'dd/MM/yyyy')}">—</td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="empty" th:if="${recentMeasures.isEmpty()}">Aucune mesure enregistrée pour l'instant.</p>
+    </section>
+</main>
+
+<footer>Health Tracker · Suivi de santé personnel</footer>
+
+</body>
+</html>

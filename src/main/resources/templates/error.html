@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erreur — Health Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <span class="brand">🩺 Health Tracker</span>
+    <nav>
+        <a th:href="@{/dashboard}">Tableau de bord</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="card">
+        <h1>Une erreur est survenue</h1>
+        <p class="subtitle" th:text="${message} ?: 'La ressource demandée est introuvable.'">
+            La ressource demandée est introuvable.
+        </p>
+        <a th:href="@{/dashboard}" class="btn btn-primary">Retour au tableau de bord</a>
+    </section>
+</main>
+
+</body>
+</html>

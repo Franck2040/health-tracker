@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utilisateurs — Health Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <span class="brand">🩺 Health Tracker</span>
+    <nav>
+        <a th:href="@{/dashboard}">Tableau de bord</a>
+        <a th:href="@{/activities}">Activités</a>
+        <a th:href="@{/measures}">Mesures</a>
+        <a th:href="@{/medications}">Traitements</a>
+        <a th:href="@{/users}" class="active">Utilisateurs</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h1>Utilisateurs</h1>
+    <p class="subtitle">Les personnes dont vous suivez la santé</p>
+
+    <section class="card">
+        <h2>Nouvel utilisateur</h2>
+        <form th:action="@{/users}" th:object="${user}" method="post">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="firstName">Prénom</label>
+                    <input type="text" id="firstName" th:field="*{firstName}">
+                    <span class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Nom</label>
+                    <input type="text" id="lastName" th:field="*{lastName}">
+                    <span class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" th:field="*{email}">
+                    <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="age">Âge</label>
+                    <input type="number" id="age" th:field="*{age}" min="0">
+                    <span class="field-error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="weight">Poids (kg)</label>
+                    <input type="number" step="0.1" id="weight" th:field="*{weight}">
+                    <span class="field-error" th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="height">Taille (cm)</label>
+                    <input type="number" step="0.1" id="height" th:field="*{height}">
+                    <span class="field-error" th:if="${#fields.hasErrors('height')}" th:errors="*{height}"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Liste</h2>
+        <table th:if="${!users.isEmpty()}">
+            <thead>
+            <tr>
+                <th>Nom complet</th>
+                <th>E-mail</th>
+                <th>Âge</th>
+                <th>Poids</th>
+                <th>Taille</th>
+                <th>IMC</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="u : ${users}">
+                <td th:text="${u.fullName}">—</td>
+                <td th:text="${u.email}">—</td>
+                <td th:text="${u.age} + ' ans'">—</td>
+                <td th:text="${u.weight} + ' kg'">—</td>
+                <td th:text="${u.height} + ' cm'">—</td>
+                <td th:text="${u.bmi}">—</td>
+                <td>
+                    <form th:action="@{'/users/' + ${u.id} + '/delete'}" method="post"
+                          onsubmit="return confirm('Supprimer cet utilisateur et toutes ses données ?');">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="empty" th:if="${users.isEmpty()}">Aucun utilisateur enregistré.</p>
+    </section>
+</main>
+
+<footer>Health Tracker · Suivi de santé personnel</footer>
+
+</body>
+</html>

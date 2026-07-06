@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traitements — Health Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <span class="brand">🩺 Health Tracker</span>
+    <nav>
+        <a th:href="@{/dashboard}">Tableau de bord</a>
+        <a th:href="@{/activities}">Activités</a>
+        <a th:href="@{/measures}">Mesures</a>
+        <a th:href="@{/medications}" class="active">Traitements</a>
+        <a th:href="@{/users}">Utilisateurs</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h1>Traitements médicamenteux</h1>
+    <p class="subtitle">Suivi des prescriptions en cours et passées</p>
+
+    <section class="card">
+        <h2>Nouveau traitement</h2>
+        <form th:action="@{/medications}" th:object="${medication}" method="post">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="userId">Utilisateur</label>
+                    <select id="userId" name="userId" required>
+                        <option value="" disabled selected>Choisir…</option>
+                        <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="name">Médicament</label>
+                    <input type="text" id="name" th:field="*{name}" placeholder="Ex. Vitamine D">
+                    <span class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="dosage">Dosage</label>
+                    <input type="text" id="dosage" th:field="*{dosage}" placeholder="Ex. 500 mg">
+                    <span class="field-error" th:if="${#fields.hasErrors('dosage')}" th:errors="*{dosage}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="frequency">Fréquence</label>
+                    <input type="text" id="frequency" th:field="*{frequency}" placeholder="Ex. 2 fois par jour">
+                    <span class="field-error" th:if="${#fields.hasErrors('frequency')}" th:errors="*{frequency}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Début</label>
+                    <input type="date" id="startDate" th:field="*{startDate}">
+                    <span class="field-error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">Fin (optionnel)</label>
+                    <input type="date" id="endDate" th:field="*{endDate}">
+                    <span class="field-error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Traitements enregistrés</h2>
+        <table th:if="${!medications.isEmpty()}">
+            <thead>
+            <tr>
+                <th>Utilisateur</th>
+                <th>Médicament</th>
+                <th>Dosage</th>
+                <th>Fréquence</th>
+                <th>Période</th>
+                <th>Statut</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="med : ${medications}">
+                <td th:text="${med.user.fullName}">—</td>
+                <td th:text="${med.name}">—</td>
+                <td th:text="${med.dosage}">—</td>
+                <td th:text="${med.frequency}">—</td>
+                <td>
+                    <span th:text="${#temporals.format(med.startDate, 'dd/MM/yyyy')}">—</span>
+                    <span th:if="${med.endDate != null}"> → <span th:text="${#temporals.format(med.endDate, 'dd/MM/yyyy')}"></span></span>
+                    <span th:if="${med.endDate == null}"> → en cours</span>
+                </td>
+                <td>
+                    <span class="badge" th:if="${med.isActiveOn(today)}">Actif</span>
+                    <span class="badge inactive" th:unless="${med.isActiveOn(today)}">Terminé</span>
+                </td>
+                <td>
+                    <form th:action="@{'/medications/' + ${med.id} + '/delete'}" method="post"
+                          onsubmit="return confirm('Supprimer ce traitement ?');">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="empty" th:if="${medications.isEmpty()}">Aucun traitement enregistré.</p>
+    </section>
+</main>
+
+<footer>Health Tracker · Suivi de santé personnel</footer>
+
+</body>
+</html>
