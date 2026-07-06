@@ -8,11 +8,11 @@ Je m'en sers comme projet de référence pour démontrer une architecture Spring
 
 ## Ce que fait l'application
 
-- **Gestion des utilisateurs** — création, consultation, suppression. Chaque utilisateur a son profil (âge, poids, taille) et son IMC est calculé automatiquement.
-- **Suivi des activités** — j'enregistre chaque séance (type, durée, calories brûlées, date).
-- **Mesures de santé** — relevés de poids, tension artérielle systolique/diastolique et fréquence cardiaque.
-- **Traitements** — les médicaments avec dosage, fréquence et période, et un statut « Actif / Terminé » calculé à la volée.
-- **Tableau de bord** — une vue synthétique qui agrège tous les indicateurs et les dernières entrées.
+- **Gestion des utilisateurs** : création, consultation, suppression. Chaque utilisateur a son profil (âge, poids, taille) et son IMC est calculé automatiquement.
+- **Suivi des activités** : j'enregistre chaque séance (type, durée, calories brûlées, date).
+- **Mesures de santé** : relevés de poids, tension artérielle systolique/diastolique et fréquence cardiaque.
+- **Traitements** : les médicaments avec dosage, fréquence et période, et un statut « Actif / Terminé » calculé à la volée.
+- **Tableau de bord** : une vue synthétique qui agrège tous les indicateurs et les dernières entrées.
 
 ---
 
@@ -47,10 +47,10 @@ J'ai suivi une séparation stricte en couches. Chaque requête traverse toujours
 Navigateur → Controller → Service (interface + impl) → Repository → Base H2
 ```
 
-- **`model`** — les entités JPA : `User`, `Activity`, `Measure`, `Medication`. C'est ici que vivent les contraintes de validation.
-- **`repository`** — les interfaces Spring Data JPA. Aucune requête SQL écrite à la main pour le CRUD de base.
-- **`service`** — la logique métier, découpée en **interface + implémentation** pour respecter l'inversion de dépendance. C'est la seule couche qui porte les transactions.
-- **`controller`** — le point d'entrée HTTP. Il valide les entrées et ne contient aucune logique métier.
+- **`model`** : les entités JPA : `User`, `Activity`, `Measure`, `Medication`. C'est ici que vivent les contraintes de validation.
+- **`repository`** : les interfaces Spring Data JPA. Aucune requête SQL écrite à la main pour le CRUD de base.
+- **`service`** : la logique métier, découpée en **interface + implémentation** pour respecter l'inversion de dépendance. C'est la seule couche qui porte les transactions.
+- **`controller`** : le point d'entrée HTTP. Il valide les entrées et ne contient aucune logique métier.
 
 Le détail complet, avec le **diagramme de classes** (relations One-to-Many) et le **diagramme de séquence** de l'enregistrement d'une mesure, se trouve dans [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
@@ -71,10 +71,10 @@ com.health.health_tracker
 
 Chaque donnée saisie est vérifiée **avant** d'atteindre la base, grâce aux annotations Jakarta. Quelques exemples concrets :
 
-- **Âge** : `@Min(0) @Max(130)` — impossible d'enregistrer un âge absurde.
-- **Poids / Taille** : `@DecimalMin` / `@DecimalMax` — bornés à des plages physiologiquement réalistes.
+- **Âge** : `@Min(0) @Max(130)` : impossible d'enregistrer un âge absurde.
+- **Poids / Taille** : `@DecimalMin` / `@DecimalMax` : bornés à des plages physiologiquement réalistes.
 - **Tension artérielle** : systolique et diastolique bornées séparément.
-- **Dates** : `@PastOrPresent` — on ne peut pas enregistrer une activité dans le futur.
+- **Dates** : `@PastOrPresent` : on ne peut pas enregistrer une activité dans le futur.
 
 Si une contrainte échoue, le contrôleur réaffiche le formulaire avec les messages d'erreur en français, sans jamais planter.
 
