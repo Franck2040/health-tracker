@@ -1,5 +1,13 @@
-# 🩺 Health Tracker
+<H1 align="center" > <b> 🩺 Health Tracker </b></H1>
 
+<p align="center">
+  <img alt="Java" src="https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white"/>
+  <img alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-3.3-6DB33F?logo=springboot&logoColor=white"/>
+  <img alt="H2 Database" src="https://img.shields.io/badge/H2-Database-2396C7?logo=h2database&logoColor=white"/>
+  <img alt="Thymeleaf" src="https://img.shields.io/badge/Thymeleaf-005F0F?logo=thymeleaf&logoColor=white"/>
+  <img alt="Maven" src="https://img.shields.io/badge/Maven-Build-C71A36?logo=apachemaven&logoColor=white"/>
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-3fbf8f"/>
+</p>
 Une application web de suivi de santé personnel que j'ai construite avec **Spring Boot 3** et **Java 17**. L'idée est simple : centraliser au même endroit les activités physiques, les mesures de santé (poids, tension, fréquence cardiaque) et les traitements médicamenteux d'un ou plusieurs utilisateurs, le tout dans une interface web claire.
 
 Je m'en sers comme projet de référence pour démontrer une architecture Spring Boot propre, en couches, avec de la validation métier sérieuse et une persistance JPA.
